@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>恋爱小游戏 💖</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Arial;
+    background: linear-gradient(135deg,#ffd6e7,#fff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.box{
+    width:420px;
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    text-align:center;
+}
+
+img{
+    width:100%;
+    height:260px;
+    object-fit:cover;
+    border-radius:15px;
+}
+
+button{
+    width:100%;
+    margin:6px 0;
+    padding:10px;
+    border:none;
+    border-radius:12px;
+    background:#ff5c8a;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#ff2f6d;
+}
+
+h2{
+    color:#ff3b7a;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <div id="start">
+        <h2>💖 恋爱小游戏</h2>
+        <img src="images/neutral.jpg" id="img">
+        <p>看看她喜不喜欢你</p>
+        <button onclick="start()">开始</button>
+    </div>
+
+    <div id="game" style="display:none;">
+        <img src="images/neutral.jpg" id="imgGame">
+        <p id="q"></p>
+        <div id="btns"></div>
+    </div>
+
+    <div id="end" style="display:none;">
+        <h2 id="res"></h2>
+        <p id="desc"></p>
+        <button onclick="restart()">再来一次</button>
+    </div>
+
+</div>
+
+<script>
+
+let i = 0;
+let love = 0;
+
+const qs = [
+    {
+        q:"第一次见面你会？",
+        a:[
+            ["主动打招呼",2,"happy.jpg"],
+            ["害羞点头",1,"shy.jpg"],
+            ["不理她",-1,"cold.jpg"]
+        ]
+    },
+    {
+        q:"她找你帮忙？",
+        a:[
+            ["马上帮",2,"happy.jpg"],
+            ["看情况",0,"neutral.jpg"],
+            ["拒绝",-2,"angry.jpg"]
+        ]
+    },
+    {
+        q:"她发消息给你？",
+        a:[
+            ["秒回",2,"happy.jpg"],
+            ["晚点回",1,"neutral.jpg"],
+            ["不回",-2,"cold.jpg"]
+        ]
+    },
+    {
+        q:"一起吃饭？",
+        a:[
+            ["让她选",1,"shy.jpg"],
+            ["随便",0,"neutral.jpg"],
+            ["你决定",-1,"cold.jpg"]
+        ]
+    },
+    {
+        q:"她生气了？",
+        a:[
+            ["认真哄",2,"happy.jpg"],
+            ["解释",1,"neutral.jpg"],
+            ["不管",-2,"angry.jpg"]
+        ]
+    }
+];
+
+function start(){
+    document.getElementById("start").style.display="none";
+    document.getElementById("game").style.display="block";
+    show();
+}
+
+function show(){
+    let data = qs[i];
+
+    document.getElementById("q").innerText = data.q;
+
+    let box = document.getElementById("btns");
+    box.innerHTML="";
+
+    data.a.forEach(v=>{
+        let b = document.createElement("button");
+        b.innerText = v[0];
+
+        b.onclick = ()=>{
+            love += v[1];
+            document.getElementById("imgGame").src = "images/"+v[2];
+
+            i++;
+
+            if(i>=qs.length){
+                end();
+            }else{
+                show();
+            }
+        };
+
+        box.appendChild(b);
+    });
+}
+
+function end(){
+    document.getElementById("game").style.display="none";
+    document.getElementById("end").style.display="block";
+
+    if(love>=7){
+        document.getElementById("res").innerText="💘 她喜欢你";
+        document.getElementById("desc").innerText="你成功了！";
+    }else if(love>=3){
+        document.getElementById("res").innerText="🙂 有好感";
+        document.getElementById("desc").innerText="还有机会";
+    }else{
+        document.getElementById("res").innerText="💔 没感觉";
+        document.getElementById("desc").innerText="她对你一般";
+    }
+}
+
+function restart(){
+    i=0;
+    love=0;
+
+    document.getElementById("end").style.display="none";
+    document.getElementById("start").style.display="block";
+}
+
+</script>
+
+</body>
+</html>
